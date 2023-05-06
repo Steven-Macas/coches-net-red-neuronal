@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="http://127.0.0.1:5000/car">
+            <select name="marca">
+                <option>&nbsp;</option>
+                <option value="opel">opel</option>
+                <option value="vw">vw</option>
+            </select>
+            <select name="modelo">
+                <option>&nbsp;</option>
+                <option value="astra">astra</option>
+                <option value="polo">polo</option>
+                <option value="corsa">corsa</option>
+            </select>
+            <input type="number" name="cv">
+            <input type="submit">
+        </form>
+        <hr>
+        <select id="marca">
+            <option>&nbsp;</option>
+            <option value="opel">opel</option>
+            <option value="vw">vw</option>
+        </select>
+        <select id="modelo">
+            <option>&nbsp;</option>
+            <option value="astra">astra</option>
+            <option value="polo">polo</option>
+            <option value="corsa">corsa</option>
+        </select>
+        <input type="number" id="cv">
+        <input type="button" id="btConsulta" value="consultar precio">
+        precio: <span id="precio"></span>
+        <script>
+            let btConsulta = document.getElementById("btConsulta");
+            let precio = document.getElementById("precio");
+            let marca = document.getElementById("marca");
+            let modelo = document.getElementById("modelo");
+            let cv = document.getElementById("cv");
+            btConsulta.addEventListener('click', function() {
+                let marca_value = marca.options[marca.selectedIndex].value;
+                let modelo_value = modelo.options[modelo.selectedIndex].value;
+                let cv_value = cv.value;
+                console.log([marca_value, modelo_value, cv_value]);
+                doFetch(marca_value, modelo_value, cv_value);
+            });
+            function doFetch(marca_value, modelo_value, cv_value) {
+                fetch('http://127.0.0.1:5000/car?marca=' + marca_value + '&modelo=' + modelo_value + '&cv=' + cv_value)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (jsonData) {
+                    console.log(jsonData);
+                    precio.innerText = jsonData.precio;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        </script>
+    </body>
+</html>
